@@ -17,10 +17,28 @@ const dbConfig = {
     encrypt: true,
     trustServerCertificate: true,
   },
+   pool: {
+    max: 10,
+    min: 0,
+    idleTimeoutMillis: 30000
+  }
 };
+let pool;
 
-export const pool = await sql.connect(dbConfig);
-console.log('connecting to DB: ', dbConfig.database)
+export async function getPool() {
+  if (pool) return pool; 
+  try {
+    pool = await sql.connect(dbConfig);
+    console.log('Connected to Azure SQL');
+    return pool;
+  } catch (err) {
+    console.error('SQL connection error:', err);
+    pool = null;
+    throw err;
+  }
+}
+// export const pool = await sql.connect(dbConfig);
+// console.log('connecting to DB: ', dbConfig.database)
 
 export async function getOrg() {
   try {
