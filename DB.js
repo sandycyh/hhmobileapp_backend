@@ -256,7 +256,6 @@ app.get('/env-check', (req, res) => {
 
 app.get('/db-test', async (req, res) => {
   try {
-    const pool = await poolPromise;
     const result = await pool.request().query('SELECT 1 AS ok');
     res.json(result.recordset);
   } catch (err) {
