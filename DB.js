@@ -252,7 +252,6 @@ app.get('/env-check', (req, res) => {
     hasDbUser: !!process.env.DB_USER,
     hasDbServer: !!process.env.DB_SERVER,
   });
-  res.json('this is DB')
 });
 
 app.get('/db-test', async (req, res) => {
