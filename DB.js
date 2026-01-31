@@ -247,20 +247,20 @@ export async function postResults(setID, HCW, Moment, Action, Glove,
   }
 }
 
-app.get('/env-check', (req, res) => {
-  res.json({
-    hasDbUser: !!process.env.DB_USER,
-    hasDbServer: !!process.env.DB_SERVER,
-  });
-});
+// app.get('/env-check', (req, res) => {
+//   res.json({
+//     hasDbUser: !!process.env.DB_USER,
+//     hasDbServer: !!process.env.DB_SERVER,
+//   });
+// });
 
-app.get('/db-test', async (req, res) => {
-  try {
-    const pool = await poolPromise;
-    const result = await pool.request().query('SELECT 1 AS ok');
-    res.json(result.recordset);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
-  }
-});
+// app.get('/db-test', async (req, res) => {
+//   try {
+//     const pool = await poolPromise;
+//     const result = await pool.request().query('SELECT 1 AS ok');
+//     res.json(result.recordset);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json(err);
+//   }
+// });
