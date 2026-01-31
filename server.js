@@ -39,6 +39,7 @@ app.get('/env-check', (req, res) => {
   res.json({
     hasDbUser: !!process.env.DB_USER,
     hasDbServer: !!process.env.DB_SERVER,
+    'this is server.js'
   });
 });
 
