@@ -38,6 +38,9 @@ app.get('/', (req, res) => {
   res.send('API is alive');
 });
 
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log(`Running on ${PORT}`));
+
 app.get('/env-check', (req, res) => {
   res.json({
     hasDbUser: !!process.env.DB_USER,
