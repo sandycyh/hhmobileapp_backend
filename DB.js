@@ -44,7 +44,8 @@ export async function getOrg() {
   try {
     const pool = await getPool();
     const result = await pool.request()
-      .query(`SELECT * FROM Organisation`);
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Organisation`);
     return result.recordset;
   } catch (error) {
     console.error(error.message);
@@ -55,7 +56,8 @@ export async function getMoment() {
   try {
     const pool = await getPool();
     const result = await pool.request()
-      .query(`SELECT * FROM Moment_Descriptions`);
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Moment_Descriptions`);
     return result.recordset;
   } catch (error) {
     console.error(error.message);
@@ -66,7 +68,8 @@ export async function getResult() {
   try {
     const pool = await getPool();
     const result = await pool.request()
-      .query(`SELECT * FROM Result`);
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Result`);
     return result.recordset;
   } catch (error) {
     console.error(error.message);
@@ -77,7 +80,8 @@ export async function getResultSets() {
   try {
     const pool = await getPool();
     const result = await pool.request()
-      .query(`SELECT * FROM ResultSets`);
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM ResultSets`);
     return result.recordset;
 
   } catch (error) {
@@ -90,8 +94,9 @@ export async function getDeptWithOrgID(OrgID) {
     const pool = await getPool();
     const result = await pool.request()
       .input('OrgID', sql.Int, OrgID)
-      .query(`SELECT * FROM Department
-            WHERE OrgID = @OrgID`);
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Department
+              WHERE OrgID = @OrgID`);
     return result.recordset;
 
   } catch (error) {
@@ -104,7 +109,8 @@ export async function getAuditorWithDeptCode(DeptCode) {
     const pool = await getPool();
     const result = await pool.request()
       .input('DeptCode', sql.Int, DeptCode)
-      .query(`SELECT * FROM Auditor 
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Auditor 
               WHERE DeptCode = @DeptCode`)
 
     return result.recordset;
@@ -119,8 +125,9 @@ export async function getResultWithSetID(setID) {
     const pool = await getPool();
     const result = await pool.request()
       .input('SetID', sql.Int, setID)
-      .query(`SELECT * FROM Result
-            WHERE SetID = @SetID`);
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Result
+              WHERE SetID = @SetID`);
     return result.recordset;
 
   } catch (error) {
@@ -136,8 +143,9 @@ export async function getOneResult(setID, resultID) {
       .input('setID', sql.Int, setID)
 
     const result = await request
-      .query(`SELECT * FROM Result
-            WHERE ResultID = @resultID
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Result
+              WHERE ResultID = @resultID
               AND SetID = @setID`)
     return result.recordset[0] ?? null;
 
@@ -151,7 +159,8 @@ export async function getResultSetwithSetID(setID) {
     const pool = await getPool();
     const result = await pool.request()
       .input('SetID', sql.Int, setID)
-      .query(`SELECT * FROM ResultSet
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM ResultSet
               WHERE SetID = @SetID`);
     return result.recordset;
 
@@ -164,7 +173,8 @@ export async function getHCW() {
   try {
     const pool = await getPool();
     const result = await pool.request()
-      .query(`SELECT * FROM HCW_Descriptions
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM HCW_Descriptions
               ORDER BY 
                 CASE WHEN Type = 'N' THEN 1
 		                WHEN Type = 'DR' THEN 2
@@ -186,7 +196,8 @@ export async function getAction() {
   try {
     const pool = await getPool();
     const result = await pool.request()
-      .query(`SELECT * FROM Action_Descriptions
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Action_Descriptions
               ORDER BY 
                 CASE WHEN Action = 'Rub' THEN 1 
 	                    WHEN Action = 'Wash' THEN 2 
@@ -203,7 +214,8 @@ export async function getGlove() {
   try {
     const pool = await getPool();
     const result = await pool.request()
-      .query(`SELECT * FROM Glove_Descriptions
+      .query(`USE HandHygieneAuditAppDB
+              SELECT * FROM Glove_Descriptions
               ORDER BY 
                 CASE WHEN Glove = 'On' THEN 1
                       WHEN Glove = 'Off' THEN 2
@@ -232,7 +244,7 @@ export async function postAuditSet({ AuditDate, StartTime, TotalTime,
       .input("TotalCorrectMoment", sql.Int, TotalCorrectMoment)
       .input("TotalMoment", sql.Int, TotalMoment)
       .input("SuccessRate", sql.Decimal(18, 0), SuccessRate)
-      .query(`
+      .query(`USE HandHygieneAuditAppDB
           INSERT INTO ResultSets (AuditDate, StartTime, TotalTime, OrgID, DeptCode, AuditedBy, TotalCorrectMoment, TotalMoment, SuccessRate)
           OUTPUT INSERTED.*
           VALUES (@AuditDate, @StartTime, @TotalTime, @OrgID, @DeptCode, @AuditedBy, @TotalCorrectMoment, @TotalMoment, @SuccessRate)
@@ -262,7 +274,7 @@ export async function postResults(setID, HCW, Moment, Action, Glove,
       .input("Action", sql.VarChar(10), Action)
       .input("Glove", sql.VarChar(4), Glove)
       .input("CorrectMoment", sql.VarChar(3), CorrectMoment)
-      .query(`
+      .query(`USE HandHygieneAuditAppDB
           INSERT INTO Result (SetID, HCW, Moment, [Action], Glove, CorrectMoment)
           OUTPUT INSERTED.*
           VALUES (@SetID, @HCW, @Moment, @Action, @Glove, @CorrectMoment)
