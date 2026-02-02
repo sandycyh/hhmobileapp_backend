@@ -17,7 +17,7 @@ const dbConfig = {
     encrypt: true,
     trustServerCertificate: true,
   },
-   pool: {
+  pool: {
     max: 10,
     min: 0,
     idleTimeoutMillis: 30000
@@ -26,7 +26,7 @@ const dbConfig = {
 let pool;
 
 export async function getPool() {
-  if (pool) return pool; 
+  if (pool) return pool;
   try {
     pool = await sql.connect(dbConfig);
     console.log('Connected to Azure SQL');
@@ -42,6 +42,7 @@ export async function getPool() {
 
 export async function getOrg() {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .query(`SELECT * FROM Organisation`);
     return result.recordset;
@@ -52,6 +53,7 @@ export async function getOrg() {
 
 export async function getMoment() {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .query(`SELECT * FROM Moment_Descriptions`);
     return result.recordset;
@@ -62,6 +64,7 @@ export async function getMoment() {
 
 export async function getResult() {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .query(`SELECT * FROM Result`);
     return result.recordset;
@@ -72,6 +75,7 @@ export async function getResult() {
 
 export async function getResultSets() {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .query(`SELECT * FROM ResultSets`);
     return result.recordset;
@@ -81,21 +85,23 @@ export async function getResultSets() {
   }
 }
 
-export async function getDeptWithOrgID(OrgID){ 
-  try{  
+export async function getDeptWithOrgID(OrgID) {
+  try {
+    const pool = await getPool();
     const result = await pool.request()
-    .input('OrgID', sql.Int, OrgID)
-    .query(`SELECT * FROM Department
+      .input('OrgID', sql.Int, OrgID)
+      .query(`SELECT * FROM Department
             WHERE OrgID = @OrgID`);
     return result.recordset;
-    
-  }catch(error){
+
+  } catch (error) {
     console.error(error.message);
   }
 }
 
 export async function getAuditorWithDeptCode(DeptCode) {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .input('DeptCode', sql.Int, DeptCode)
       .query(`SELECT * FROM Auditor 
@@ -108,21 +114,23 @@ export async function getAuditorWithDeptCode(DeptCode) {
   }
 }
 
-export async function getResultWithSetID(setID){
-  try{
+export async function getResultWithSetID(setID) {
+  try {
+    const pool = await getPool();
     const result = await pool.request()
-    .input('SetID', sql.Int, setID)
-    .query(`SELECT * FROM Result
+      .input('SetID', sql.Int, setID)
+      .query(`SELECT * FROM Result
             WHERE SetID = @SetID`);
     return result.recordset;
-    
-  }catch(error){ 
+
+  } catch (error) {
     console.error(error.message);
   }
 }
 
 export async function getOneResult(setID, resultID) {
   try {
+    const pool = await getPool();
     const request = pool.request()
       .input('resultID', sql.Int, resultID)
       .input('setID', sql.Int, setID)
@@ -138,9 +146,10 @@ export async function getOneResult(setID, resultID) {
   }
 }
 
-export async function getResultSetwithSetID(setID){
+export async function getResultSetwithSetID(setID) {
   try {
-      const result = await pool.request()
+    const pool = await getPool();
+    const result = await pool.request()
       .input('SetID', sql.Int, setID)
       .query(`SELECT * FROM ResultSet
               WHERE SetID = @SetID`);
@@ -153,6 +162,7 @@ export async function getResultSetwithSetID(setID){
 
 export async function getHCW() {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .query(`SELECT * FROM HCW_Descriptions
               ORDER BY 
@@ -174,6 +184,7 @@ export async function getHCW() {
 
 export async function getAction() {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .query(`SELECT * FROM Action_Descriptions
               ORDER BY 
@@ -190,6 +201,7 @@ export async function getAction() {
 
 export async function getGlove() {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .query(`SELECT * FROM Glove_Descriptions
               ORDER BY 
@@ -209,6 +221,7 @@ export async function getGlove() {
 export async function postAuditSet({ AuditDate, StartTime, TotalTime,
   OrgID, DeptCode, AuditedBy, TotalCorrectMoment, TotalMoment, SuccessRate }) {
   try {
+    const pool = await getPool();
     const result = await pool.request()
       .input("AuditDate", sql.Date, AuditDate)
       .input("StartTime", sql.VarChar(8), StartTime)
@@ -241,7 +254,7 @@ export async function postAuditSet({ AuditDate, StartTime, TotalTime,
 export async function postResults(setID, HCW, Moment, Action, Glove,
   CorrectMoment) {
   try {
-
+    const pool = await getPool();
     const result = await pool.request()
       .input("SetID", sql.Int, setID)
       .input("HCW", sql.VarChar(3), HCW)
@@ -265,21 +278,5 @@ export async function postResults(setID, HCW, Moment, Action, Glove,
   }
 }
 
-app.get('/env-check2', (req, res) => {
-  res.json({
-    hasDbUser: !!process.env.DB_USER,
-    hasDbServer: !!process.env.DB_SERVER,
-  });
-});
 
-app.get('/db-test2', async (req, res) => {
-  try {
-    const pool = await getPool();
-    const result = await pool.request().query('SELECT 1 AS ok');
-    res.json(result.recordset);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
-  }
-});
 

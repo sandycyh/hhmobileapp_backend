@@ -48,6 +48,7 @@ app.get('/env-check', (req, res) => {
   });
 });
 
+
 app.get('/db-test', async (req, res) => {
   try {
     const pool = await getPool();
@@ -58,3 +59,4 @@ app.get('/db-test', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
