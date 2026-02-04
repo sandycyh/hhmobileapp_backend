@@ -271,7 +271,7 @@ export async function postResults(setID, HCW, Moment, Action, Glove,
       .input("SetID", sql.Int, setID)
       .input("HCW", sql.VarChar(3), HCW)
       .input("Moment", sql.Int, Moment)
-      .input("Action", sql.VarChar(10), Action)
+      .input("Action", sql.VarChar(6), Action)
       .input("Glove", sql.VarChar(4), Glove)
       .input("CorrectMoment", sql.VarChar(3), CorrectMoment)
       .query(`USE HandHygieneAuditAppDB
