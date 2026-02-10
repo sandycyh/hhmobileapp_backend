@@ -24,7 +24,7 @@ app.use('/api/Organisation', orgRoutes)
 
 app.use('/api/Department', deptRoutes)
 
-app.use('/api/Auditors', auditorRoutes)
+app.use('/api/Auditor', auditorRoutes)
 
 app.use('/api/HCW', HCWRoutes)
 app.use('/api/Moments', momentRoutes) 

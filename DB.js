@@ -239,7 +239,7 @@ export async function postAuditSet({ AuditDate, StartTime, TotalTime,
       .input("StartTime", sql.VarChar(8), StartTime)
       .input("TotalTime", sql.VarChar(8), TotalTime)
       .input("OrgID", sql.Int, OrgID)
-      .input("DeptCode", sql.VarChar(10), DeptCode)
+      .input("DeptCode", sql.Int, DeptCode)
       .input("AuditedBy", sql.Int, AuditedBy)
       .input("TotalCorrectMoment", sql.Int, TotalCorrectMoment)
       .input("TotalMoment", sql.Int, TotalMoment)
@@ -252,7 +252,6 @@ export async function postAuditSet({ AuditDate, StartTime, TotalTime,
     if (!result.recordset || !result.recordset[0] || !result.recordset[0].SetID) {
       throw new Error("Failed to get SetID from insert")
     }
-
 
     // return the inserted row to the caller (if needed)
     return result.recordset[0].SetID;
