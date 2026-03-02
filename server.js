@@ -1,19 +1,17 @@
 import express from 'express';
 import cors from "cors";
-import { getPool } from './DB.js';
+import { getPool } from './src/db/DB.js'
 
-import orgRoutes from './routes/org.routes.js';
-import deptRoutes from './routes/departments.routes.js';
-import auditorRoutes from './routes/auditors.routes.js';
-import HCWRoutes from './routes/HCW.routes.js';
-import momentRoutes from './routes/moments.routes.js';
-import actionRoutes from './routes/actions.routes.js';
-import gloveRoutes from './routes/gloves.routes.js';
-
-import resultRoutes from './routes/results.routes.js';
-import resultSetsRoutes from './routes/resultSets.routes.js';
-
-console.log('App booting...');
+import orgRoutes from './src/routes/org.routes.js';
+import deptRoutes from './src/routes/departments.routes.js';
+import auditorRoutes from './src/routes/auditors.routes.js';
+import HCWRoutes from './src/routes/HCW.routes.js';
+import momentRoutes from './src/routes/moments.routes.js';
+import actionRoutes from './src/routes/actions.routes.js';
+import gloveRoutes from './src/routes/gloves.routes.js';
+import resultRoutes from './src/routes/results.routes.js';
+import resultSetsRoutes from './src/routes/resultSets.routes.js';
+import login from './src/routes/auth/login.js';
 
 const app = express();
 app.use(cors());
@@ -21,18 +19,15 @@ app.use(express.json());
 
 
 app.use('/api/Organisation', orgRoutes)
-
 app.use('/api/Department', deptRoutes)
-
 app.use('/api/Auditor', auditorRoutes)
-
 app.use('/api/HCW', HCWRoutes)
 app.use('/api/Moments', momentRoutes) 
 app.use('/api/Actions', actionRoutes)
 app.use('/api/Glove', gloveRoutes)
-
 app.use('/api/Result', resultRoutes)
 app.use('/api/ResultSets', resultSetsRoutes)
+app.use('/login', login)
 
 app.get('/', (req, res) => {
   res.send('API is alive');
@@ -60,3 +55,7 @@ app.get('/db-test', async (req, res) => {
   }
 });
 
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: err.message });
+});

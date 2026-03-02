@@ -1,15 +1,15 @@
-import { hashPassword, verifyPassword } from '/password/passwordHashing';
+import { hashPassword, verifyPassword } from './passwordHashing';
 
 describe('Pasword hashing', () => {
     const plainPassword = 'thisismyPW123'; 
 
     test('hashPassword returns a hash', async () => {
         const hash = await hashPassword(plainPassword);
+        console.log(hash);
 
         expect(hash).toBeDefined();
         expect(hash).not.toBe(plainPassword);
         expect(typeof hash).toBe('string');
-        console.log(hash);
     }); 
 
     test('verifyPassword returns true for correct password', async () => {

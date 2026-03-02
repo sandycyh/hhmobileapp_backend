@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getMoment } from '../DB.js';
+import { getMoment } from '../db/DB.js';
 
 const router = Router();
 

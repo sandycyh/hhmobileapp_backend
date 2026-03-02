@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAuditorWithDeptCode } from '../DB.js';
+import { getAuditorWithDeptCode } from '../db/DB.js';
 
 const router = Router();
 //Auditor

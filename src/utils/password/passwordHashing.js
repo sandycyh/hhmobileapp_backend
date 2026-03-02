@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+
 const saltRounds = 12; 
 
 export async function hashPassword(password){

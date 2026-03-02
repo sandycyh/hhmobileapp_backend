@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getHCW } from '../DB.js';
+import { getHCW } from '../db/DB.js';
 
 const router = Router();
 

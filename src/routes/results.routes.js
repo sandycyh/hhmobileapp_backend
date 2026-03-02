@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getResultWithSetID, getOneResult, getResult, postResults } from '../DB.js';
+import { getResultWithSetID, getOneResult, getResult, postResults } from '../db/DB.js';
 
 const router = Router();
 

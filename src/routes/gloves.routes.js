@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getGlove } from '../DB.js';
+import { getGlove } from '../db/DB.js';
 
 const router = Router();
 
