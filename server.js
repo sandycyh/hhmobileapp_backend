@@ -12,7 +12,8 @@ import gloveRoutes from './src/routes/gloves.routes.js';
 import resultRoutes from './src/routes/results.routes.js';
 import resultSetsRoutes from './src/routes/resultSets.routes.js';
 import login from './src/routes/auth/login.js';
-
+import { requireAuth } from './src/middleware/auth.js';
+import routeProtection from './src/routes/auth/routeProtection.js';
 const app = express();
 app.use(cors());
 app.use(express.json());  
@@ -28,6 +29,7 @@ app.use('/api/Glove', gloveRoutes)
 app.use('/api/Result', resultRoutes)
 app.use('/api/ResultSets', resultSetsRoutes)
 app.use('/login', login)
+app.use('/audit', requireAuth, routeProtection)
 
 app.get('/', (req, res) => {
   res.send('API is alive');
@@ -59,3 +61,4 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ error: err.message });
 });
+

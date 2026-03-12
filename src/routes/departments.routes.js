@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import { getDeptWithOrgID } from '../db/DB.js';
 
 const router = Router();

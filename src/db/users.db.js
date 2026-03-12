@@ -10,7 +10,6 @@ export async function getUserByUsername(username) {
             .query(`SELECT *
                 FROM RegisteredUsers 
                 WHERE Username = @username`);
-
         return result.recordset[0];
     } catch (error) {
         console.error(error.message);

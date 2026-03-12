@@ -1,19 +1,20 @@
- import { verifyToken } from '../utils/jwt.js';
+import jwt from 'jsonwebtoken';
 
- export function requireAuth(req, res, next) {
-    const authHeader = req.headers.authorization; 
+export function requireAuth(req, res, next) {
+    try {
+        const authHeader = req.headers.authorization;
 
-    if(!authHeader?.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Missing token' }); 
-    }
+        if (!authHeader || !authHeader?.startsWith('Bearer ')) {
+            return res.status(401).json({ message: 'Missing token' });
+        }
 
-    const token = authHeader.split(' ')[1];
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    try { 
-        const payload = verifyToken(token);
-        req.user = payload; 
+        req.user = decoded;
         next();
-    }catch(err){
+
+    } catch (err) {
         return res.status(401).json({ message: 'Invalid or expired token' });
     }
- }
+}

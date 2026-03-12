@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { hashPassword, verifyPassword } from '../../utils/password/passwordHashing.js'
-import { signToken } from '../../utils/jwt.js';
+import { verifyPassword } from '../../utils/password/passwordHashing.js'
 import { getUserByUsername } from '../../db/users.db.js';
 import jwt from 'jsonwebtoken';
 
@@ -20,9 +19,15 @@ router.post('/', async (req, res) => {
     }
 
     const user = await getUserByUsername(username);
-
-    if (!user.Username) {
-        return res.status(401).json({ message: 'Invalid credentials' })
+    
+    if (user) {
+        if (!user.Username) {
+            return res.status(401).json({ message: 'Invalid credentials' })
+        }
+    } else {
+        return res.status(401).json({
+            error: "Invalid username or password"
+        });
     }
 
     const correctPW = await verifyPassword(password, user.PasswordHash);
@@ -32,7 +37,7 @@ router.post('/', async (req, res) => {
     if (!correctPW) {
         return res.status(401).json({ message: 'Invalid credentials' });
     }
-        const token = jwt.sign(
+    const token = jwt.sign(
         {
             userId: user.UserID,
             audId: user.auditorID,
@@ -43,6 +48,7 @@ router.post('/', async (req, res) => {
     );
     console.log('token: ', token)
     console.log('user exists')
+
     return res.json({ token })
 });
 
